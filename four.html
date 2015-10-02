@@ -1,0 +1,282 @@
+<html>
+  <head>
+    <title>fourjs</title>
+    <style>
+      body { margin: 0; }
+      canvas { width: 100%; height: 100%; background: 0xDC143C; }
+    </style>
+  </head>
+  <body>
+
+    <script src="js/three.min.js"></script>
+    <script src="js/ColladaLoader.js"></script>
+    <script src="js/threex.keyboardstate.js"></script>
+    <script>
+
+      var scale = 2;
+      var size = 40;
+      renderer = new THREE.WebGLRenderer();
+     // renderer.setClearColor( 0x22FFF8, 1);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 600);
+      camera.position.set(0, 0,100);
+      camera.lookAt(new THREE.Vector3(0, 0, 0));
+      scene = new THREE.Scene();
+
+
+      var keyboard = new THREEx.KeyboardState();
+      //Ligth
+
+      directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+            directionalLight.position.set( -1 , 1 , 10 ).normalize();
+            scene.add( directionalLight );
+      //MATERIAL
+      var material = new THREE.LineBasicMaterial({
+          color: 0x0011ff
+      });
+      var material2 = new THREE.LineBasicMaterial({
+          color: 0xDC143C 
+      });
+      var material3 = new THREE.LineBasicMaterial({
+          color: 0x0FEF8E
+      });
+
+      //GEOMETR
+      var backblock = new THREE.CubeGeometry(100 , 100, 10);
+
+
+
+      var geometry = new THREE.Geometry();
+
+      for (var i = 0; i <size; i++) { 
+        geometry.vertices.push(new THREE.Vector3(i*scale, 0, 0));
+        geometry.vertices.push(new THREE.Vector3(size*scale, i*scale+scale, 0));
+        geometry.vertices.push(new THREE.Vector3(size*scale, i*scale+2*scale, 0));
+      }
+
+      //GEOMETRY
+      var geoback = new THREE.Geometry();
+
+      var geospike = new THREE.CylinderGeometry(1/2/2 , 0, 1/2*200);
+
+      for (var i = 0; i <size; i++) { 
+        geoback.vertices.push(new THREE.Vector3(i*scale*2, 0, 0));
+        geoback.vertices.push(new THREE.Vector3(size*scale*2, i*scale*2+scale*2, 0));
+        geoback.vertices.push(new THREE.Vector3(size*scale*2, i*scale*2+2*scale*2, 0));
+      }
+      //OBJECT
+
+      var line = new THREE.Line(geometry, material);
+      var line2 = new THREE.Line(geometry, material);
+      line2.rotation.z = Math.PI/2;
+      var line3 = new THREE.Line(geometry, material);
+      line3.rotation.z = Math.PI/2 *3
+      var line4 = new THREE.Line(geometry, material);
+      line4.rotation.z = Math.PI;
+      //line4.rotation.y = Math.PI;
+
+      var line5 = new THREE.Line(geometry, material3);
+      line5.rotation.y = Math.PI;
+      var line6 = new THREE.Line(geometry, material3);
+      line6.rotation.y = Math.PI;
+      line6.rotation.z = Math.PI/2;
+      var line7 = new THREE.Line(geometry, material3);
+      line7.rotation.y = Math.PI;
+      line7.rotation.z = Math.PI/2 *3
+      var line8 = new THREE.Line(geometry, material3);
+      line8.rotation.y = Math.PI;
+      line8.rotation.z = Math.PI;
+
+      var line9 = new THREE.Line(geometry, material);
+     // line9.position.x = 50;
+      line9.position.y = size*scale;
+      line9.rotation.z = Math.PI;
+
+      var line10 = new THREE.Line(geometry, material3);
+      line10.position.x = size*scale;
+    //  line10.position.y = 50;
+      line10.rotation.z = Math.PI/2;
+
+      var line11 = new THREE.Line(geometry, material3);
+      line11.position.x = -size*scale;
+      line11.rotation.z = Math.PI/2*3;
+
+      var line12 = new THREE.Line(geometry, material);
+      line12.position.y = -size*scale;
+    //  line10.position.y = 50;
+     // line12.rotation.z = Math.PI/2;
+      
+      var back1 = new THREE.Line(geoback, material);
+      back1.scale = 10;
+      back1.position.x += 0;
+      back1.position.y -= size*scale;
+
+      var back2 = new THREE.Line(geoback, material3);
+      back2.rotation.z = Math.PI/2;
+      back2.scale = 10;
+      back2.position.x += size*scale*2+2;
+      back2.position.y -= size*scale;
+
+      var back3 = new THREE.Line(geoback, material);
+      back3.scale = 10;
+      back3.position.x += 0;
+      back3.position.y -= 0; size*scale;
+
+      var back4 = new THREE.Line(geoback, material);
+      back4.rotation.z = Math.PI;
+      back4.scale = 10;
+      back4.position.x += size*scale*2+2;
+      back4.position.y -= 0;size*scale;
+
+      var back1l = new THREE.Line(geoback, material);
+      back1l.rotation.z = Math.PI;
+      back1l.rotation.x = Math.PI;
+      back1l.scale = 10;
+      back1l.position.x += 0;
+      back1l.position.y -= 0;size*scale;
+
+      var back2l = new THREE.Line(geoback, material3);
+      back2l.rotation.z = Math.PI/2;
+      back2l.rotation.y = Math.PI;
+      back2l.scale = 10;
+      back2l.position.x -= size*scale*2;
+      back2l.position.y -= size*scale;
+
+      var back3l = new THREE.Line(geoback, material3);
+      back3l.scale = 10;
+      back3l.rotation.z = Math.PI;
+      back3l.rotation.x = Math.PI;
+      back3l.position.x += 0;
+      back3l.position.y -= size*scale;
+
+      var back4l = new THREE.Line(geoback, material);
+      back4l.rotation.z = Math.PI/2;
+      back4l.rotation.y = 0;
+      back4l.position.x -= 0;size*scale*2;
+      back4l.position.y -= size*scale*2;
+      
+      var cubes = new Array();
+        var lines = new Array();
+      var msilver = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0x555555, specular: 0x666666, shininess: 10 });
+        for (var j=1;j<=80;j++){
+        cubes[j] = new Array()
+        for(var i=1;i<4;i++){
+          if (i*j % 2 == 0) {
+           cubes[j][i] = new THREE.Mesh( geospike, msilver);
+          //  cubes[j][i] = scene.daa;
+          } else {
+            cubes[j][i] = new THREE.Mesh( geospike, msilver
+             );
+          }
+
+
+
+              scene.add( cubes[j][i]);
+              cubes[j][i].position.x =  i;///scale
+              cubes[j][i].position.y =  j/scale-20
+              cubes[j][i].position.z = 2 
+              cubes[j][i].rotation.z = 1.5;
+            }
+      }
+      scene.add(line);
+      scene.add(line2);
+      scene.add(line3);
+      scene.add(line4); 
+    scene.add(line5);
+    scene.add(line6);
+    scene.add(line7);
+    scene.add(line8);
+    scene.add(line9);
+    scene.add(line10);
+    scene.add(line11);
+   
+   scene.add(line12);
+
+      scene.add(back1);
+      scene.add(back2);
+      scene.add(back3);
+      scene.add(back4);
+      function nextrapid(x,y) {
+                    cubes[x][y].rotation.y += 0.01 +(j/10);
+                  }
+          
+      for(var j=1;j<=80;j++){
+                    for(var i=1;i<4;i++)
+                      {
+                        nextrapid(j,i);
+                      }
+                    }
+      scene.add(back1l);
+      scene.add(back2l);
+      scene.add(back3l);
+      scene.add(back4l);
+
+
+
+      function render() {
+        requestAnimationFrame( render );
+       // camera.rotation.z += 0.02;
+        line.rotation.x += 0.02;
+        line2.rotation.x += 0.02;
+        line3.rotation.x += 0.02;
+        line4.rotation.x += 0.02;
+
+        line5.rotation.y += 0.02;
+        line6.rotation.y += 0.02;
+        line7.rotation.y += 0.02;
+        line8.rotation.y += 0.02;
+
+        line9.rotation.y -= 0.01;
+        line10.rotation.x -= 0.01;
+        line11.rotation.x -= 0.01;
+        line12.rotation.y -= 0.01;
+
+      //  back1.rotation.y -= 0.05;
+      //  back2.rotation.x -= 0.05;
+      //  back3.rotation.x -= 0.05;
+      //  back4.rotation.x -= 0.05;
+      //  back1l.rotation.y += 0.05;
+      //  back2l.rotation.x += 0.05;
+      //  back3l.rotation.y += 0.05;
+      //  back4l.rotation.y += 0.05;
+
+//      camera.rotation.z += 0.05;
+
+       
+        for(var j=1;j<=80;j++){
+                    for(var i=1;i<4;i++)
+                      {
+           //             nextrapid(j,i);
+                      //  cubes[j][i].geometry
+                        cubes[j][i].rotation.y += 0.08 ;
+                    //     cubes[j][i].scale.y = (Math.abs(Math.sin(cubes[j][i].rotation.y+1)*10));
+                         // if (cubes[j][i].scale.y -1 < 0.4794199999) {cubes[j][i].material = mred;};
+                         // if (cubes[j][i].scale.y -1 > ) {cubes[j][i].material = mgold;};
+                   //daa.rotation.z += 0.5;
+                    }}
+        //back1.material.color = back1.material.color + 5000;
+        size++;
+
+      if( keyboard.pressed( "left" )) {
+       camera.position.x += 1.2
+       }
+       if( keyboard.pressed( "right" )) {
+       camera.position.x -= 1.2
+       }
+       if( keyboard.pressed( "up" )) {
+       camera.position.y -= 1.2
+       }
+       if( keyboard.pressed( "down" )) {
+       camera.position.y += 1.2
+       }
+      renderer.render(scene, camera);
+     }
+      render();
+   // renderer.render(scene, camera);
+    </script>
+
+
+	</body>
+</html>
+
