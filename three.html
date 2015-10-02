@@ -1,0 +1,177 @@
+<html>
+  <head>
+    <title>wall3d</title>
+    <style>
+      body { margin: 0; }
+      canvas { width: 100%; height: 100% }
+    </style>
+  </head>
+  <body>
+    <div>Menu</div>
+    <script src="js/three.min.js"></script>
+    <script src="js/ColladaLoader.js"></script>
+    <script src="js/threex.keyboardstate.js"></script>
+    <script src="js/material.js"></script>
+    <script>
+
+			// Our Javascript will go here.
+      var count = 5
+      var linecount = 50
+      var scale = 20
+      var startx =  0
+      var starty = -1
+      var scale2= 1/scale;
+
+      var keyboard = new THREEx.KeyboardState();
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+      directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+            directionalLight.position.set( -1 , 1 , 10 ).normalize();
+            scene.add( directionalLight );
+      directionalLight2 = new THREE.DirectionalLight( 0xffffff, 1 );
+            directionalLight.position.set( -1 , 1 , 15 ).normalize();
+            scene.add( directionalLight2 );
+
+
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+
+      document.body.appendChild( renderer.domElement );
+      var cubes = new Array();
+      var lines = new Array();
+      var geometry = new THREE.CylinderGeometry(scale2/2 , 0, scale2*10);
+      var block = new THREE.CubeGeometry(scale2, scale2, 0.005);
+      
+      //var material = new THREE.MeshNormalMaterial( { color: 0x00f000 } );
+  
+      
+      var mlinel = new THREE.LineBasicMaterial({
+        color: 0x0000ff
+    });
+      var material = mheart;
+
+
+      var daa;
+      var loader = new THREE.ColladaLoader();
+      
+        loader.options.convertUpAxis = true;
+      
+        loader.load( 'models/ring.dae', function ( collada ) {
+       //dummy1.dae
+      
+          var dae = collada.scene;
+          
+          var skin = collada.skins[ 1 ];
+      
+      dae.position.set(0,0, 1);//x,z,y- if you think in blender dimensions ;)
+      dae.scale.set(1,0.8,1);
+      dae.rotation.x =+ 1.5;
+  //    dae.rotation.x =+ 2;
+  //    dae.rotation.y =+ 0.5;
+      dae.material = matx.mgold;
+      scene.add(dae);
+      daa = dae;
+
+      
+      });
+
+      for (var j=1;j<=linecount;j++){
+        cubes[j] = new Array()
+        for(var i=1;i<count;i++){
+          if (i*j % 2 == 0) {
+           cubes[j][i] = new THREE.Mesh( geometry, matx.msilver);
+          //  cubes[j][i] = scene.daa;
+          } else {
+            cubes[j][i] = new THREE.Mesh( geometry, matx.mgold
+             );
+          }
+
+
+
+              scene.add( cubes[j][i]);
+              cubes[j][i].position.x = startx + i/scale
+              cubes[j][i].position.y = starty  + j/scale
+              cubes[j][i].position.z = 2 
+              cubes[j][i].rotation.z = 1.5;
+            }
+      }
+                  
+                var geoline = new THREE.Geometry();
+    geoline.vertices.push(new THREE.Vector3(-10, 0, 0));
+    geoline.vertices.push(new THREE.Vector3(0, 10, 0));
+    geoline.vertices.push(new THREE.Vector3(10, 0, 0));
+////
+   // var line = new THREE.Line(geoline, mline1);
+  //  scene.add(line);
+//gl.colorMask(gl.FALSE, gl.FALSE, gl.FALSE, gl.FALSE);
+//gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+//gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
+
+
+//gl.colorMask(true, true, true, true);
+//gl.stencilFunc(gl.EQUAL, 0, 0xFF);
+//gl.stencilOp(gl.ZERO, gl.ZERO, gl.ZERO)
+
+                  camera.position.z = 3; 
+                  function nextrapid(x,y) {
+                    cubes[x][y].rotation.y += 0.1 +(x/10000)+(y/10000);
+                  }
+
+                  function render() {
+                    requestAnimationFrame( render );
+                  // cubes.map()
+                    for(var j=1;j<=linecount;j++){
+                    for(var i=1;i<count;i++)
+                      {
+                        nextrapid(j,i);
+                      //  cubes[j][i].geometry
+                      //  cubes[j][i].rotation.y += 0.08 ;
+                    //     cubes[j][i].scale.y = (Math.abs(Math.sin(cubes[j][i].rotation.y+1)*10));
+                         // if (cubes[j][i].scale.y -1 < 0.4794199999) {cubes[j][i].material = mred;};
+                         // if (cubes[j][i].scale.y -1 > ) {cubes[j][i].material = mgold;};
+                   //daa.rotation.z += 0.5;
+                    }}
+              camera.rotation.z = cubes[10][1].rotation.y/10;
+              camera.position.z += Math.sin(cubes[10][1].rotation.y/10)/100;
+              camera.position.y += Math.sin(cubes[10][1].rotation.y/10)/100;
+             // camera.rotation.x = cubes[1][1].rotation.y;
+
+            if( keyboard.pressed( "left" )) {
+              camera.position.x += 0.02
+            }
+            if( keyboard.pressed( "right" )) {
+              camera.position.x -= 0.02
+            }
+            if( keyboard.pressed( "up" )) {
+              camera.position.y += 0.02
+            }
+            if( keyboard.pressed( "down" )) {
+              camera.position.y -= 0.02
+            }
+            if( keyboard.pressed( "alt+pageup" )) {
+              camera.position.z -= 0.2
+             // directionalLight.position.x += 0.2
+            }
+            if( keyboard.pressed( "alt+pagedown" )) {
+              camera.position.z += 0.2
+             // directionalLight.position.x -= 0.2
+            }
+            if( keyboard.pressed( "pageup" )) {
+             // camera.position.z -= 0.2
+              directionalLight.position.y += 0.2
+
+            }
+            if( keyboard.pressed( "pagedown" )) {
+             // camera.position.z += 0.2
+             directionalLight.position.y -= 0.2
+            }
+	            renderer.render( scene, camera );
+                  }
+                  render();
+    </script>
+
+
+	</body>
+</html>
+
